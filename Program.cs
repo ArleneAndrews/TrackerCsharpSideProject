@@ -78,69 +78,81 @@ foreach (var project in workList)
     Console.WriteLine($"{project} updated to {statusText}");
 }
 
-Console.SetCursorPosition(0, Console.CursorTop - 1);
+//console.SetCursorPosition(0, Console.CursorTop );
 Console.WriteLine("\r ");
 Console.WriteLine("Off hours stuff");
-Console.Write("Don't forget ");
+Console.WriteLine("c-Completed,i-In Progress,s-Skip,n-Not Started, f -Finished\n");
 var stuff = 0;
 
-if (personalProjects.Length > 1)
-{
-    foreach (var craft in offHoursList)
-    {
-        stuff++;
-        if (stuff < personalProjects.Length)
-            Console.Write($"{craft}, ");
 
-        else
-            Console.WriteLine($"and {craft}.");
+foreach (var craft in offHoursList)
+{
+    stuff++;
+    if (stuff <= personalProjects.Length)
+
+    {
+        var progress = "";
+
+        Console.WriteLine($"{craft}?");
+
+        var status = Console.ReadLine();
+        progress = status switch
+        {
+            "c" => "completed!"
+            , "i" => "in progress . . . ."
+            , "s" => "skipped."
+            , "n" => "not started."
+            , "f" => "finished!"
+            , _ => progress
+        };
+
+        if (progress == "f")
+        {
+            offHoursList.RemoveRange(stuff, 1);
+        }
+
+        Console.SetCursorPosition(0, Console.CursorTop - 2);
+        Console.WriteLine($"{craft} updated to {progress}");
     }
 }
 
-else
-{
-    Console.Write($"{offHoursList[0]}.");
-}
-
-
 Console.WriteLine("\nReminder:");
-switch (total)
-{
-    case >= 8:
-        Console.WriteLine("I'm pushing burn out.");
-        break;
-    case > 5:
-        Console.WriteLine("I really shouldn't take on any more.");
-        break;
-    case < 3:
-        var startOptions = "";
-        Console.WriteLine($"Is it time to start {futureProjects[next]}?");
-        var start = Console.ReadLine();
-        startOptions = start switch
-        {
-            "y" => "Yes"
-            , "n" => "No."
-            , _ => startOptions
-        };
-        if (startOptions == "n")
-        {
-            var change = futureProjects[next];
-            newStuff.RemoveRange(next, 1);
-            newStuff.Add(change);
-        }
+    switch (total)
+    {
+        case >= 8:
+            Console.WriteLine("I'm pushing burn out.");
+            break;
+        case > 5:
+            Console.WriteLine("I really shouldn't take on any more.");
+            break;
+        case < 3:
+            var startOptions = "";
+            Console.WriteLine($"Is it time to start {newStuff[next]}?");
+            var start = Console.ReadLine();
+            startOptions = start switch
+            {
+                "y" => "Yes"
+                , "n" => "No."
+                , _ => startOptions
+            };
+            if (startOptions == "n")
+            {
+                var change = futureProjects[next];
+                newStuff.RemoveRange(next, 1);
+                newStuff.Add(change);
+            }
 
-        else
-        {
-            var change = futureProjects[next];
-            newStuff.RemoveRange(next, 1);
-            newStuff.Add(change);
-            offHoursList.Add(change);
-        }
-        
-        break;
-    //ideal case
-    default:
-        Console.WriteLine("Doing good!");
-        break;
-}
+            else
+            {
+                var change = futureProjects[next];
+                newStuff.RemoveRange(next, 1);
+                newStuff.Add(change);
+                offHoursList.Add(change);
+            }
 
+            break;
+        //ideal case
+        default:
+            Console.WriteLine("Doing good!");
+            break;
+    }
