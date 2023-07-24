@@ -23,7 +23,7 @@ string[] workProjects =
 };
 List<string> workList = new List<string>(workProjects);
 string[] personalProjects =
-    { "French", "spinning", "Tone Up" };
+    { "French", "spinning", "liquids" };
 List<string> offHoursList = new List<string>(personalProjects);
 string[] futureProjects =
 {
@@ -65,8 +65,14 @@ foreach (var project in workList)
         , "i" => "in progress . . . ."
         , "s" => "skipped."
         , "n" => "not started."
+        , "f" => "finished!"
         , _ => statusText
     };
+     if (status == "f")
+    {
+        var change = workList[update];
+        workList.RemoveRange(update, 1);
+    }
 
     Console.SetCursorPosition(0, Console.CursorTop - 2);
     Console.WriteLine($"{project} updated to {statusText}");
